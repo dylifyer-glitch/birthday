@@ -1,0 +1,903 @@
+<!doctype html>
+
+<html lang="ru">
+
+<head>
+
+  <meta charset="utf-8" />
+
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+  <title>Открытка — С Днём Рождения!</title>
+
+  <style>
+
+    /* ----------  Simple Apple-like aesthetic + colorful details  ---------- */
+
+    :root{
+
+      --bg:#fbfbfd;
+
+      --glass: rgba(255,255,255,0.55);
+
+      --accent-1: linear-gradient(90deg,#ff6ec7,#ffd86b,#7ee7ff,#b88bff);
+
+      --card-shadow: 0 8px 30px rgba(22,26,30,0.08);
+
+      --radius:18px;
+
+      --glass-border: rgba(255,255,255,0.6);
+
+      --text:#0b0b0d;
+
+      --muted:#6b6f76;
+
+      --glass-2: rgba(255,255,255,0.75);
+
+    }
+
+    html { height: 100%; background-color: var(--bg); }
+
+    body { min-height: 100%; margin:0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; color:var(--text); -webkit-font-smoothing:antialiased; position: relative; }
+
+    /* Parallax background layer */
+
+    #parallax-bg {
+
+      position: fixed;
+
+      top: 0;
+
+      left: 0;
+
+      width: 100%;
+
+      z-index: -1;
+
+      background: radial-gradient(2000px 1000px at 10% 10%, rgba(120,100,255,0.06), transparent), radial-gradient(1600px 800px at 90% 90%, rgba(255,160,120,0.04), transparent), var(--bg);
+
+      background-attachment: fixed;
+
+      background-size: cover;
+
+      will-change: transform;
+
+    }
+
+    /* Global container */
+
+    .wrap{max-width:1100px;margin:32px auto;padding:28px;}
+
+    /* Hero */
+
+    .hero{height:70vh;min-height:420px;display:flex;align-items:center;justify-content:center;position:relative;overflow:visible}
+
+    .hero-card{width:86%;max-width:980px;background:linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.62));border-radius:28px;padding:48px;backdrop-filter: blur(8px);box-shadow:var(--card-shadow);border:1px solid var(--glass-border);position:relative;overflow:visible}
+
+    .title{font-size:46px;font-weight:800;text-align:center;margin:6px 0;letter-spacing:0.4px;background:var(--accent-1);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+    .subtitle{text-align:center;color:var(--muted);margin-top:8px;font-weight:600}
+
+    /* Decorative balloons + confetti */
+
+    .balloon{position:absolute;width:72px;height:100px;border-radius:60px;transform-origin:center;animation:float 6s ease-in-out infinite}
+
+    .balloon::after{content:'';position:absolute;left:50%;bottom:-10px;width:2px;height:20px;background:rgba(0,0,0,0.07);transform:translateX(-50%)}
+
+    .balloon.p1{background:linear-gradient(180deg,#ff9a9e,#fecfef);animation-delay:0s}
+
+    .balloon.p2{background:linear-gradient(180deg,#7ee7ff,#b88bff);animation-delay:1s}
+
+    .balloon.p3{background:linear-gradient(180deg,#ffd86b,#ff6ec7);animation-delay:2s}
+
+    .balloon.p4{background:linear-gradient(180deg,#b88bff,#7ee7ff);animation-delay:0.5s; transform: scale(0.8);}
+
+    .balloon.p5{background:linear-gradient(180deg,#fecfef,#ff9a9e);animation-delay:1.5s; transform: scale(1.2);}
+
+    @keyframes float{0%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-18px) rotate(4deg)}100%{transform:translateY(0) rotate(-3deg)}}
+
+    /* ribbon confetti canvas covers */
+
+    canvas.confetti{position:fixed;left:0;top:0;pointer-events:none;z-index:5}
+
+    canvas.fireworks{position:fixed;left:0;top:0;pointer-events:none;z-index:6}
+
+    /* Sections */
+
+    section{margin:64px 0;padding:42px;border-radius:18px;background:linear-gradient(180deg, rgba(255,255,255,0.80), rgba(255,255,255,0.72));box-shadow:var(--card-shadow);border:1px solid rgba(11,12,13,0.04);position:relative;overflow:visible}
+
+    h2{font-size:22px;margin:0 0 12px 0}
+
+    p.lead{color:var(--muted);line-height:1.5}
+
+    /* Story animation for congrats */
+
+    .story-line { opacity: 0; transform: translateY(10px); transition: opacity 0.8s ease, transform 0.8s ease, background-color 1.5s ease; }
+
+    .story-line.visible { opacity: 1; transform: translateY(0); }
+
+    .story-line.highlight { background-color: rgba(255, 215, 0, 0.2); transition: background-color 1.5s ease; }
+
+    /* Two column: text + photos */
+
+    .cols{display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start}
+
+    .photo-slot{background:linear-gradient(180deg, rgba(250,250,255,1), rgba(245,245,250,1));border-radius:14px;padding:12px;display:grid;gap:10px}
+
+    .photo-slot .thumb{height:160px;border-radius:10px;background:linear-gradient(180deg, #f3f4f8,#fff);display:flex;align-items:center;justify-content:center;color:var(--muted);font-weight:600}
+
+    /* Photo gallery grid */
+
+    .gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+
+    .gallery img{width:100%;height:150px;object-fit:cover;border-radius:10px}
+
+    /* Retrospective list */
+
+    ol.retros{padding-left:20px;color:var(--muted);line-height:1.6}
+
+    .screenshot{height:160px;border-radius:10px;background:linear-gradient(90deg,#f7f7ff,#fff);display:flex;align-items:center;justify-content:center;color:var(--muted);font-weight:700}
+
+    /* Quotes area */
+
+    .quotes{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+
+    .quote-box{padding:14px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(250,250,255,0.96));border:1px solid rgba(11,12,13,0.04)}
+
+    .quote-box li{margin:8px 0}
+
+    /* Poem style */
+
+    .poem{white-space:pre-line;font-style:italic;color:var(--muted);line-height:1.5}
+
+    /* Signature animation */
+
+    .signature { opacity: 0; transform: translateY(20px); animation: floatUp 2s ease-out forwards, pulseLight 3s infinite ease-in-out; }
+
+    @keyframes floatUp { to { opacity: 1; transform: translateY(0); } }
+
+    @keyframes pulseLight { 0%, 100% { text-shadow: 0 0 4px rgba(255, 215, 0, 0.3); } 50% { text-shadow: 0 0 12px rgba(255, 215, 0, 0.6); } }
+
+    /* Modal styles */
+
+    .modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(0.9);background:rgba(255,255,255,1);padding:26px;border-radius:16px;z-index:40;box-shadow:0 24px 60px rgba(11,12,13,0.3);border:1px solid rgba(11,12,13,0.06);opacity:0;pointer-events:none;transition:200ms ease}
+
+    .modal.open{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+
+    .modal h3{margin:0 0 8px}
+
+    .modal .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+
+    .btn{padding:10px 14px;border-radius:10px;border:0;background:#0b0b0d;color:white;cursor:pointer;font-weight:700}
+
+    .btn.ghost{background:transparent;color:var(--text);border:1px solid rgba(11,12,13,0.06)}
+
+    .btn.small{padding:6px 10px;font-size:12px;}
+
+    /* Fixed fireworks button */
+
+    #fireworksBtn { position: fixed; bottom: 20px; right: 20px; z-index: 50; padding: 12px 20px; border-radius: 50px; background: linear-gradient(90deg, #ff6ec7, #ffd86b); color: white; font-weight: bold; border: none; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+
+    /* small responsive */
+
+    @media (max-width:880px){
+
+      .cols{grid-template-columns:1fr}
+
+      .hero{height:56vh}
+
+      .title{font-size:32px}
+
+    }
+
+    /* subtle reveal animation for sections */
+
+    .reveal{opacity:0;transform:translateY(18px);transition:500ms cubic-bezier(.2,.9,.2,1)}
+
+    .reveal.visible{opacity:1;transform:none}
+
+    footer{margin:34px 0 90px 0;text-align:center;color:var(--muted)}
+
+  </style>
+
+</head>
+
+<body>
+
+  <div id="parallax-bg"></div>
+
+  <canvas class="confetti" id="confetti"></canvas>
+
+  <canvas class="fireworks" id="fireworks"></canvas>
+
+  <div class="wrap">
+
+    <header class="hero">
+
+      <div class="balloon p1" style="right:8%;top:12%;"></div>
+
+      <div class="balloon p2" style="left:6%;top:10%;"></div>
+
+      <div class="balloon p3" style="left:18%;top:6%;"></div>
+
+      <div class="balloon p4" style="right:15%;top:5%;"></div>
+
+      <div class="balloon p5" style="left:12%;top:15%;"></div>
+
+      <div class="hero-card">
+
+        <div style="display:flex;justify-content:center;align-items:center;flex-direction:column">
+
+          <h1 class="title" id="mainTitle">С Днём Рождения, мой дорогой!</h1>
+
+          <p class="subtitle">Тебе уже 17, ого, глазом моргнёшь уже и пиво можно будет покупать!!</p>
+
+          <div style="margin-top:18px;display:flex;flex-direction:column;gap:12px;align-items:center">
+
+            <button class="btn" id="openCongrats">Открыть поздравление</button>
+
+            <button class="btn ghost small" id="toggleConfetti">Вкл/Выкл конфетти</button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </header>
+
+    <!-- Sections with varied balloons -->
+
+    <section class="reveal" id="official">
+
+      <div class="balloon p1" style="right: -5%; top: -25%;"></div>
+
+      <div class="balloon p2" style="left: -8%; top: -15%;"></div>
+
+      <div class="balloon p3" style="left: 10%; top: -30%;"></div>
+
+      <div class="balloon p4" style="right: -15%; top: -10%;"></div>
+
+      <div class="balloon p5" style="left: -2%; top: -35%;"></div>
+
+      <h2>Официальное традиционное поздравление</h2>
+
+      <div class="cols">
+
+        <div>
+
+          <p class="lead" id="storyText">
+
+            <span class="story-line">Начну своё поздравление официально:</span><br>
+
+            <span class="story-line">Эдуард, вам уже 17! ЕГЭ сдавать скоро, но давайте поговорим о более весёлых вещах.</span><br>
+
+            <span class="story-line">Например, о том, что сегодня – праздник!</span><br>
+
+            <span class="story-line">Осенью 2008 года под знаком весов родился ты, а потом в 2025 году я от скуки зашёл в Тандем ну собственно, а сейчас я от тебя не отстану.</span><br>
+
+            <span class="story-line">Спасибо, что ежедневно даришь улыбку и поднимаешь настроение!!</span><br>
+
+            <span class="story-line">Хз, без тебя бы этот год был слишком скучный и просто фу.</span><br>
+
+            <span class="story-line">Понял да? В этот прекрасный день желаю тебе здоровья, любви, настоящего счастья человеческого и чтобы поступил туда, куда хотел.</span><br>
+
+            <span class="story-line">Даже не так надо сказать. Надо так: чтобы все твои планы (и мечты) сбывались!</span>
+
+          </p>
+
+          <p style="font-weight:700;margin-top:10px" class="signature">С любовью, Миша</p>
+
+        </div>
+
+        <aside class="photo-slot">
+            <img class="thumb" src="2025-10-16 21.01.23.jpg" alt="Фото 1" style="max-width: 100%; max-height: 100%; object-fit: contain; margin: auto; display: block;">
+            <img class="thumb" src="2025-10-16 21.02.20.jpg" alt="Фото 2" style="max-width: 100%; max-height: 100%; object-fit: contain; margin: auto; display: block;">
+        </aside>
+
+      </div>
+
+    </section>
+
+    <section class="reveal" id="gallery">
+
+      <div class="balloon p1" style="right: -12%; top: -18%;"></div>
+
+      <div class="balloon p2" style="left: -5%; top: -28%;"></div>
+
+      <div class="balloon p3" style="left: 15%; top: -10%;"></div>
+
+      <div class="balloon p4" style="right: -8%; top: -32%;"></div>
+
+      <div class="balloon p5" style="left: 5%; top: -20%;"></div>
+
+      <h2>ФОТО-ИИ-АЛЬБОМ (ну и просто пара фото)</h2>
+
+      <div class="gallery" id="galleryGrid">
+
+        <!-- replace images/photoX.jpg with real images -->
+
+        <img src="1760619795274-0199ed1c-e104-7907-b023-e499a808c5f3.jpeg" alt="photo1" onerror="this.style.opacity=0.35;this.style.background='#f3f4f8'">
+
+        <img src="1760620342356-0199ed25-877e-7084-801a-796ddc5fd94e.jpeg" alt="photo2">
+
+        <img src="1760620534423-0199ed28-ca61-7268-9d68-308cd54a91b7.jpeg" alt="photo3">
+
+        <img src="1760622216690-0199ed41-8159-7d72-9f39-2ed449655b7e.png" alt="photo4">
+
+        <img src="1760622904111-0199ed4c-9bd2-77e6-9b44-9cea21007b19.jpeg" alt="photo5">
+
+        <img src="1760623478833-0199ed55-89d4-7c6a-a98f-6b78934fe009.jpeg" alt="photo6">
+
+      </div>
+
+    </section>
+
+    <section class="reveal" id="retro">
+
+      <div class="balloon p1" style="right: -10%; top: -30%;"></div>
+
+      <div class="balloon p2" style="left: -15%; top: -12%;"></div>
+
+      <div class="balloon p3" style="left: 8%; top: -25%;"></div>
+
+      <div class="balloon p4" style="right: -3%; top: -15%;"></div>
+
+      <div class="balloon p5" style="left: -10%; top: -35%;"></div>
+
+      <h2>Ретроспектива</h2>
+
+      <ol class="retros">
+
+        <li>Я играл в фазмофобию, потом устал, зашел в Тандем в надежде, что иностранцы будут писать, но они не писали. А потом у кого-то в отзывах я увидел тебя. Думаю: «о как, напишу ему, но 100% не ответит или просто не захочет общаться»… А потом ну… Он стал писать каждый день))</li>
+
+        <li>Первым твоим гс было то, как ты бомбишь на руссичку</li>
+
+       <li>
+          <img class="screenshot" src="Screenshot 2025-10-16 at 20.58.18.png" alt="Скриншот" style="max-width: 100%; max-height: 100%; object-fit: contain; margin: auto; display: block;">
+      </li>
+
+        <li>Я помню, как посвящал тебя в что такое «узбечка» и Львовская 1в</li>
+
+        <li>Помню, как ты решил взять недельный перерыв от ТГ и соцсетей. Я подумал, что так элегантно меня ещё не отшивали. So, I was wrong</li>
+
+        <li>Помню, как я не слал и стирал многие сообщения, чтобы «не спугнуть» и чтобы ты не подумал, что «я дебил какой-то», а потом пошло-поехало</li>
+
+        <li>Помню, как ты учил меня различать СТРЕЙ КИДС (я до сих пор не умею)</li>
+
+        <li>Помню первую неловкость в общении</li>
+
+        <li>Примерно Я ТАК ЧУВСТВУЮ СЕБЯ после того, как мод на тик-ток  перестал работать из-за блокировки  в США – мой первый пост в твоём ТГ</li>
+
+        <li>Нью Джинс. Я не знал, кто это вообще. Но благодаря тебе несколько песен я послушал</li>
+
+        <li>Помню, боялся, что по итогу ты просто окажешься слэй нормисом</li>
+
+        <li>Помню, как мы создали бленд в спотифае, а потом ты заставил скачать хайп Эирбадс (люблю это приложение)</li>
+
+        <li>Только в марте ты мне дал тикток, чтобы я окончательно показал насколько я ебанутый</li>
+
+        <li>Помню, как ты удивилась, что я это тот чел который делал видео про лололошку</li>
+
+        <li>КАК МЫ ПРОХОДИЛИ ТЕСТИКИ</li>
+
+        <li>Я нашел тебя в соцальной сети ВКОНТАКТЕ</li>
+
+        <li>Как ты смотрел мою матрицу судьбы</li>
+
+        <li>Как я тебе показывал весь Нижний Новгород, пока ходил в Мак на нижневолжской</li>
+
+        <li>Как ты сказал, что тут пиздец депрессивно и я воссиял, что нормальные люди видят этот город-пиздец правильно</li>
+
+        <li>Помню, как начали делиться историями</li>
+        
+        <li>Помню, как из-за тебя у меня прибавилось много любимых эмодзи и стикеров (тот же самый Спотти или закатывающий глаза смайлик)</li>
+
+        <li>Поняли, что оба фанаты Евровидения</li>
+
+        <li>А дальше уже началась дружба, и надеюсь, что истинная</li>
+
+        <li>А ещё конечно же репо и майнкрафт :)</li>
+
+      </ol>
+
+    </section>
+
+    <section class="reveal" id="quotes">
+
+      <div class="balloon p1" style="right: -8%; top: -20%;"></div>
+
+      <div class="balloon p2" style="left: -12%; top: -30%;"></div>
+
+      <div class="balloon p3" style="left: 12%; top: -15%;"></div>
+
+      <div class="balloon p4" style="right: -18%; top: -25%;"></div>
+
+      <div class="balloon p5" style="left: 0%; top: -10%;"></div>
+
+      <h2>Наши гениальные закрепы</h2>
+
+      <div class="quotes">
+
+        <div class="quote-box">
+
+          <h3>Твои цитатки</h3>
+
+          <ul>
+
+            <li>Ну ты блять прям блять интеллигент риздец</li>
+
+            <li>Ммздеу</li>
+
+            <li>я куфат,я пикми,мне можно,СОСАТЬ АМЕРИКА</li>
+
+            <li>Тихий шок</li>
+
+            <li>Я жду Мальту с пиздой</li>
+
+            <li>Я опешила</li>
+
+            <li>Иксы под иксами суки</li>
+
+            <li>Ухты ебухты</li>
+
+            <li>Мне срочно нужно купить хуйни в фикспрайсе</li>
+
+            <li>Чайная намбер ван</li>
+
+            <li>Ольга помидоры, иди нахуй</li>
+
+          </ul>
+
+        </div>
+
+        <div class="quote-box">
+
+          <h3>Мои цитатки</h3>
+
+          <ul>
+
+            <li>Унитаз как символ</li>
+
+            <li>золотой понос</li>
+
+            <li>простите что долго не отвечала лесбиянила</li>
+
+            <li>Летом будем держать в трахе Казань четыре года</li>
+
+            <li>Щас я постель застрелю</li>
+
+          </ul>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="reveal" id="poem">
+
+      <div class="balloon p1" style="right: -15%; top: -10%;"></div>
+
+      <div class="balloon p2" style="left: -3%; top: -25%;"></div>
+
+      <div class="balloon p3" style="left: 20%; top: -20%;"></div>
+
+      <div class="balloon p4" style="right: -5%; top: -35%;"></div>
+
+      <div class="balloon p5" style="left: -18%; top: -15%;"></div>
+
+      <h2>Стихотворение</h2>
+
+      <div class="poem">Осень – такая золотая пора, что приносит нам праздник.
+Например, на свет в октябре появился непослушный проказник!
+Ему в этот солнечный день желаю я радости, добра и счастья,
+Отметь черной ручкой себе на руке - что лучший здесь ТЫ - на этом запястье.
+
+И хоть я видел тебя лишь в интернете, ты мне всё равно дорог!
+По алгебре в школе жду от тебя не мало, а много пятёрок.
+Хотя… просто учись в удовольствие и веселись, думай приятно 
+И настроением своим с остальными делись – весьма необъятно
+
+Люблю тебя, Эдик, мой друг дорогой, мой друг самый лучший!
+Так внезапно, но чудно в мою жизнь шагнувший, в меня радость вдувший -
+Знай одно, мой Эдуард, в моей жизни ты не просто картинка
+Ты ко всему прекрасному путь, к самому счастью тропинка</div>
+
+    </section>
+
+    <section class="reveal" id="gift">
+
+      <div class="balloon p1" style="right: -2%; top: -28%;"></div>
+
+      <div class="balloon p2" style="left: -20%; top: -18%;"></div>
+
+      <div class="balloon p3" style="left: 5%; top: -32%;"></div>
+
+      <div class="balloon p4" style="right: -12%; top: -15%;"></div>
+
+      <div class="balloon p5" style="left: 15%; top: -25%;"></div>
+
+      <h2>Подарок и финал</h2>
+
+      <p class="lead">Надеюсь, подарок ты мой получишь сегодня днём и снимешь обзорчик (там ебатория одна едет прямо в притык, надеюсь она днём приедет и я скину Кью-Ар кодик на ОЗОН!!!) Но сходишь, конечно, когда удобно будет</p>
+
+      <p style="font-weight:800" class="signature">Люблю тебя, мой дорогой. С днём рождения, твой Миша ❤️</p>
+
+    </section>
+
+    <footer class="reveal">© Персональная открытка от rrilz </footer>
+
+  </div>
+
+  <!-- Modal -->
+
+  <div class="modal" id="modalCongrats" role="dialog" aria-modal="true" aria-hidden="true">
+
+    <h3>С Днём Рождения, Эдик!</h3>
+
+    <p>Пусть этот день будет ярким!!! Жми "Конфетти", чтобы устроить маленький праздник!</p>
+
+    <div class="actions">
+
+      <button class="btn ghost" id="closeModal">Закрыть</button>
+
+      <button class="btn" id="fireConfetti">Конфетти!</button>
+
+    </div>
+
+  </div>
+
+  <!-- Fixed Fireworks Button -->
+
+  <button id="fireworksBtn">Запустить фейерверк!</button>
+
+  <script>
+
+    /* ----------------- Config (редактируешь здесь) ----------------- */
+
+    const SITE = {
+
+      title: 'С Днём Рождения, мой дорогой!',
+
+      subtitle: 'Тебе уже 17, ого, глазом моргнёшь уже и пиво можно будет покупать!!',
+
+      signature: 'С любовью, Миша',
+
+    };
+
+    document.getElementById('mainTitle').textContent = SITE.title;
+
+    document.querySelector('.subtitle').textContent = SITE.subtitle;
+
+    /* ---------- modal logic ---------- */
+
+    const modal = document.getElementById('modalCongrats');
+
+    const openBtn = document.getElementById('openCongrats');
+
+    const closeBtn = document.getElementById('closeModal');
+
+    openBtn.addEventListener('click', ()=>{modal.classList.add('open');modal.setAttribute('aria-hidden','false'); launchFireworks();});
+
+    closeBtn.addEventListener('click', ()=>{modal.classList.remove('open');modal.setAttribute('aria-hidden','true')});
+
+    /* ---------- confetti (simple ribbons) ---------- */
+
+    const confCanvas = document.getElementById('confetti');
+
+    const confCtx = confCanvas.getContext('2d');
+
+    let W = confCanvas.width = innerWidth;
+
+    let H = confCanvas.height = innerHeight;
+
+    window.addEventListener('resize', ()=>{W=confCanvas.width=innerWidth;H=confCanvas.height=innerHeight; updateParallaxHeight();});
+
+    let confParticles = [];
+
+    function rand(min,max){return Math.random()*(max-min)+min}
+
+    function createConfParticle(){
+
+      return {
+
+        x: rand(0,W), y:-10, size: rand(6,14), speedY: rand(1,4), rot: rand(0,6.28), rSpeed: rand(-0.08,0.08), color: ['#ff6ec7','#ffd86b','#7ee7ff','#b88bff'][Math.floor(rand(0,4))]
+
+      }
+
+    }
+
+    for(let i=0;i<40;i++) confParticles.push(createConfParticle());
+
+    let confOn = false;
+
+    function drawConf(){
+
+      confCtx.clearRect(0,0,W,H);
+
+      if(confOn){
+
+        if(confParticles.length<180 && Math.random()<0.6) confParticles.push(createConfParticle());
+
+        confParticles.forEach((p,i)=>{
+
+          p.y += p.speedY;
+
+          p.x += Math.sin(p.y*0.02)*1.5;
+
+          p.rot += p.rSpeed;
+
+          confCtx.save(); confCtx.translate(p.x,p.y); confCtx.rotate(p.rot);
+
+          confCtx.fillStyle = p.color; confCtx.fillRect(-p.size/2, -p.size/2, p.size, p.size*0.5);
+
+          confCtx.restore();
+
+          if(p.y>H+30) confParticles.splice(i,1);
+
+        })
+
+      }
+
+      requestAnimationFrame(drawConf);
+
+    }
+
+    drawConf();
+
+    document.getElementById('fireConfetti').addEventListener('click', ()=>{confOn=true;modal.classList.remove('open')});
+
+    document.getElementById('toggleConfetti').addEventListener('click', ()=>{confOn=!confOn});
+
+    /* ---------- Realistic Fireworks ---------- */
+
+    const fwCanvas = document.getElementById('fireworks');
+
+    const fwCtx = fwCanvas.getContext('2d');
+
+    fwCanvas.width = W;
+
+    fwCanvas.height = H;
+
+    let fireworks = [];
+
+    let fwParticles = [];
+
+    function createFirework(x, y) {
+
+      const hue = rand(0, 360);
+
+      const firework = { x, y: H, targetY: y, speed: rand(5, 8), radius: 2, color: `hsl(${hue}, 100%, 50%)` };
+
+      fireworks.push(firework);
+
+    }
+
+    function explodeFirework(fw) {
+
+      const count = rand(100, 200);
+
+      const hue = parseInt(fw.color.match(/hsl\((\d+)/)[1]);
+
+      for (let i = 0; i < count; i++) {
+
+        const angle = rand(0, Math.PI * 2);
+
+        const speed = rand(1, 5);
+
+        const particle = {
+
+          x: fw.x,
+
+          y: fw.y,
+
+          vx: Math.cos(angle) * speed,
+
+          vy: Math.sin(angle) * speed,
+
+          radius: rand(1, 3),
+
+          life: 100,
+
+          decay: rand(0.92, 0.98),
+
+          color: `hsl(${hue + rand(-20, 20)}, 100%, ${rand(50, 80)}%)`
+
+        };
+
+        fwParticles.push(particle);
+
+      }
+
+    }
+
+    function drawFireworks() {
+
+      fwCtx.globalCompositeOperation = 'destination-out';
+
+      fwCtx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+
+      fwCtx.fillRect(0, 0, W, H);
+
+      fwCtx.globalCompositeOperation = 'lighter';
+
+      fireworks.forEach((fw, i) => {
+
+        fwCtx.beginPath();
+
+        fwCtx.arc(fw.x, fw.y, fw.radius, 0, Math.PI * 2);
+
+        fwCtx.fillStyle = fw.color;
+
+        fwCtx.fill();
+
+        fw.y -= fw.speed;
+
+        if (fw.y <= fw.targetY) {
+
+          explodeFirework(fw);
+
+          fireworks.splice(i, 1);
+
+        }
+
+      });
+
+      fwParticles.forEach((p, i) => {
+
+        fwCtx.beginPath();
+
+        fwCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+
+        fwCtx.fillStyle = p.color;
+
+        fwCtx.fill();
+
+        p.x += p.vx;
+
+        p.y += p.vy;
+
+        p.vx *= p.decay;
+
+        p.vy *= p.decay;
+
+        p.life--;
+
+        p.radius *= 0.98;
+
+        if (p.life <= 0) fwParticles.splice(i, 1);
+
+      });
+
+      requestAnimationFrame(drawFireworks);
+
+    }
+
+    drawFireworks();
+
+    function launchFireworks(count = 5) {
+
+      for (let i = 0; i < count; i++) {
+
+        setTimeout(() => {
+
+          createFirework(rand(0, W), rand(100, H / 2));
+
+        }, i * 200);
+
+      }
+
+    }
+
+    // Fireworks on page load
+
+    window.addEventListener('load', () => { launchFireworks(); updateParallaxHeight(); });
+
+    // Update parallax height
+
+    function updateParallaxHeight() {
+
+      const parallaxBg = document.getElementById('parallax-bg');
+
+      parallaxBg.style.height = `${document.body.scrollHeight}px`;
+
+    }
+
+    /* ---------- Parallax Effect ---------- */
+
+    window.addEventListener('scroll', () => {
+
+      const scroll = window.scrollY;
+
+      document.getElementById('parallax-bg').style.transform = `translateY(-${scroll * 0.2}px)`;
+
+      updateParallaxHeight();
+
+    });
+
+    /* ---------- Story Animation ---------- */
+
+    const storyLines = document.querySelectorAll('.story-line');
+
+    const observer = new IntersectionObserver(entries => {
+
+      if (entries[0].isIntersecting) {
+
+        storyLines.forEach((line, index) => {
+
+          setTimeout(() => {
+
+            line.classList.add('visible');
+
+            setTimeout(() => line.classList.add('highlight'), 800);
+
+            setTimeout(() => line.classList.remove('highlight'), 3000);
+
+          }, index * 1000);
+
+        });
+
+      }
+
+    });
+
+    observer.observe(document.getElementById('storyText'));
+
+    /* ---------- scroll reveal using IntersectionObserver ---------- */
+
+    const reveals = document.querySelectorAll('.reveal');
+
+    const obs = new IntersectionObserver((entries)=>{
+
+      entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+
+    },{threshold:0.12});
+
+    reveals.forEach(r=>obs.observe(r));
+
+    /* ---------- small UI niceties: click-to-enlarge gallery images ---------- */
+
+    document.getElementById('galleryGrid').addEventListener('click', (e)=>{
+
+      if(e.target.tagName!=='IMG') return;
+
+      const src = e.target.src;
+
+      openImagePreview(src);
+
+    });
+
+    function openImagePreview(src){
+
+      const prev = document.createElement('div');
+
+      prev.style.position='fixed';prev.style.left=0;prev.style.top=0;prev.style.right=0;prev.style.bottom=0;prev.style.display='flex';prev.style.alignItems='center';prev.style.justifyContent='center';prev.style.background='rgba(11,12,13,0.6)';prev.style.zIndex=60;
+
+      const img = document.createElement('img');img.src=src;img.style.maxWidth='92%';img.style.maxHeight='86%';img.style.borderRadius='12px';img.style.boxShadow='0 24px 60px rgba(11,12,13,0.5)';prev.appendChild(img);
+
+      prev.addEventListener('click', ()=>document.body.removeChild(prev));
+
+      document.body.appendChild(prev);
+
+    }
+
+    /* ---------- gentle page intro (for Apple-like smoothness) ---------- */
+
+    document.addEventListener('DOMContentLoaded', ()=>{
+
+      setTimeout(()=>document.querySelector('header').style.opacity=1,120);
+
+      updateParallaxHeight();
+
+    });
+
+    /* ---------- accessibility: escape closes modal ---------- */
+
+    document.addEventListener('keydown',(e)=>{ if(e.key==='Escape'){ modal.classList.remove('open'); confOn=false } });
+    document.getElementById('fireworksBtn').addEventListener('click', () => { launchFireworks(5); });
+  </script>
+
+</body>
+
+</html>
