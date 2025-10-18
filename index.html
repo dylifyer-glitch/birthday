@@ -3,6 +3,8 @@
 <html lang="ru">
 
 <head>
+  
+  
 
   <meta charset="utf-8" />
 
@@ -152,12 +154,30 @@
 
     /* Signature animation */
 
-    .signature { opacity: 0; transform: translateY(20px); animation: floatUp 2s ease-out forwards, pulseLight 3s infinite ease-in-out; }
+    .signature { 
+  opacity: 0; 
+  animation: fadeInSignature 2s ease-out forwards; 
+}
 
-    @keyframes floatUp { to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeInSignature { 
+  to { 
+    opacity: 1; 
+  } 
+}
 
-    @keyframes pulseLight { 0%, 100% { text-shadow: 0 0 4px rgba(255, 215, 0, 0.3); } 50% { text-shadow: 0 0 12px rgba(255, 215, 0, 0.6); } }
+/* Если хочешь лёгкий подъём без улёта */
+.signature { 
+  opacity: 0; 
+  transform: translateY(10px); /* Меньше, чем 20px */
+  animation: gentleFloat 1.5s ease-out forwards; 
+}
 
+@keyframes gentleFloat { 
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  } 
+}
     /* Modal styles */
 
     .modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(0.9);background:rgba(255,255,255,1);padding:26px;border-radius:16px;z-index:40;box-shadow:0 24px 60px rgba(11,12,13,0.3);border:1px solid rgba(11,12,13,0.06);opacity:0;pointer-events:none;transition:200ms ease}
@@ -475,6 +495,653 @@
 
     </section>
 
+
+
+<div class="magic8ball-section" style="text-align: center; margin: 40px 0; padding: 30px; background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(250,250,255,0.96)); border-radius: 18px; box-shadow: var(--card-shadow); border: 1px solid rgba(11,12,13,0.04); position: relative; overflow: hidden;">
+  <!-- Floating sparkles background -->
+  <div class="sparkle-bg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;">
+    <div class="sparkle" style="position: absolute; top: 20%; left: 10%; width: 4px; height: 4px; background: #ffd86b; border-radius: 50%; animation: sparkleFloat 4s ease-in-out infinite;"></div>
+    <div class="sparkle" style="position: absolute; top: 60%; left: 80%; width: 6px; height: 6px; background: #7ee7ff; border-radius: 50%; animation: sparkleFloat 5s ease-in-out infinite reverse;"></div>
+    <div class="sparkle" style="position: absolute; top: 80%; left: 20%; width: 3px; height: 3px; background: #ff6ec7; border-radius: 50%; animation: sparkleFloat 3s ease-in-out infinite;"></div>
+  </div>
+
+  <h3 style="margin: 0 0 20px 0; color: var(--text); font-size: 20px; font-weight: 600;">Спроси магический шар о нас! 🔮✨</h3>
+  
+  <button class="btn magic-btn" id="magicBtn" style="position: relative; z-index: 2; padding: 12px 24px; border-radius: 50px; background: linear-gradient(90deg, #ff6ec7, #ffd86b, #7ee7ff); color: white; font-weight: bold; border: none; cursor: pointer; box-shadow: 0 4px 15px rgba(255, 110, 199, 0.3); transition: all 0.3s ease; overflow: hidden;">
+    <span class="btn-text">Встряхни шар! 🎱</span>
+    <div class="btn-glow" style="position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); transition: left 0.5s;"></div>
+  </button>
+  
+  <p id="ballAnswer" class="answer-text" style="color: #ff6ec7; font-weight: bold; margin-top: 15px; font-size: 18px; opacity: 0; transform: scale(0.8) translateY(10px); transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); letter-spacing: 0.5px;"></p>
+</div>
+<style>/* Epic animations for the magic 8-ball */
+@keyframes sparkleFloat {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.7; }
+  50% { transform: translateY(-10px) scale(1.2); opacity: 1; }
+}
+
+.magic-btn:hover {
+  transform: scale(1.05) rotate(2deg);
+  box-shadow: 0 6px 20px rgba(255, 110, 199, 0.4);
+}
+
+.magic-btn:active {
+  transform: scale(0.98) rotate(-2deg);
+}
+
+.magic-btn.shake {
+  animation: epicShake 0.5s ease-in-out;
+}
+
+@keyframes epicShake {
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px) rotate(-5deg); }
+  20%, 40%, 60%, 80% { transform: translateX(5px) rotate(5deg); }
+}
+
+.answer-text.reveal {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes bounceIn {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.05); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.btn-glow {
+  transition: left 0.6s ease;
+}
+
+.magic-btn.clicked .btn-glow {
+  left: 100%;
+}
+
+.magic-btn.clicked .btn-text {
+  animation: textWiggle 0.3s ease-in-out;
+}
+
+@keyframes textWiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(5deg); }
+  75% { transform: rotate(-5deg); }
+}</style>
+
+<script>const compliments = [
+  "Ты делаешь каждый день смешнее!",
+  "Твои цитаты — чистое золото! 💎",
+  "Ты мастер Stray Kids, я в шоке! 🔥",
+  "Помнишь нашу первую неловкость? Теперь только хохотушки-веселушки! 😄",
+  "Ты — мой любимый 'куфат пикми'! ❤️",
+  "Спасибо за всё 🎵",
+  "Ты делаешь мир ярче, Эдик! 🌈",
+  "Люблю твои 'ухты ебухты'!",
+  "Ты сдашь все свои ЕГЭ на 100!! 💯",
+  "Репо и майнкрафт с тобой — это эпик! 🎮",
+  "Вместе мы бы выиграли Евровидение! 🌟",
+  "Ты мой любимый собеседник ☕",
+  "Ты — причина, почему я улыбаюсь экрану 📱💕",
+  "Наши истории — лучший сериал ever! 📖",
+  "Ты круче любого трека из бленда! 🎧",
+  "С тобой скука — это миф 🕒",
+];
+
+const magicBtn = document.getElementById('magicBtn');
+const ballAnswer = document.getElementById('ballAnswer');
+let currentInterval = null;
+
+function showNewCompliment() {
+  // Плавный fade out без исчезновения (opacity to 0.3)
+  ballAnswer.style.opacity = '0.3';
+  ballAnswer.style.transform = 'scale(0.98)';
+  setTimeout(() => {
+    const random = compliments[Math.floor(Math.random() * compliments.length)];
+    ballAnswer.textContent = random;
+    ballAnswer.classList.add('reveal');
+    // Восстановление opacity и scale через transition
+    ballAnswer.style.opacity = '1';
+    ballAnswer.style.transform = 'scale(1)';
+  }, 300);
+}
+
+function magic8Ball() {
+  // Shake the button
+  magicBtn.classList.add('shake', 'clicked');
+  setTimeout(() => magicBtn.classList.remove('shake'), 500);
+  setTimeout(() => magicBtn.classList.remove('clicked'), 600);
+
+  // Glow sweep effect
+  const glow = magicBtn.querySelector('.btn-glow');
+  glow.style.left = '100%';
+  setTimeout(() => glow.style.left = '-100%', 600);
+
+  // Остановить предыдущий цикл
+  if (currentInterval) {
+    clearInterval(currentInterval);
+    currentInterval = null;
+  }
+
+  // Показать первый комплимент
+  setTimeout(() => {
+    showNewCompliment();
+
+    // Small firework if function exists
+    if (typeof launchFireworks === 'function') {
+      launchFireworks(1);
+    }
+
+    // Цикл замены каждые 15 секунд (текст всегда виден, просто меняется)
+    currentInterval = setInterval(showNewCompliment, 15000);
+  }, 800);
+}
+
+// На клик: сброс + запуск
+magicBtn.addEventListener('click', magic8Ball);</script>
+
+
+
+
+
+
+
+    <section class="reveal" id="anecdotes">
+  <div class="balloon p1" style="right: -8%; top: -20%;"></div>
+  <div class="balloon p2" style="left: -12%; top: -30%;"></div>
+  <div class="balloon p4" style="right: -18%; top: -25%;"></div>
+
+  <h2>Анекдоты</h2>
+  <div class="anecdote-slider">
+    <button class="slider-btn prev" aria-label="Предыдущий анекдот">&#9664;</button>
+    <div class="slider-container">
+      <div class="slider-track">
+        <div class="slide">
+          <p class="lead"><b>Едет мужик в поезде. Напротив него сосед достает банан, солит его и выкидывает в окно. Достает следующий банан, проделывает все тоже самое. Мужик ничего не понимает. Когда сосед в очередной раз достал банан, посолил и выкинул в окно, то решился спросить:<br>
+- Извините, но что вы делаете? Зачем вы солите бананы и выбрасываете?<br>
+- Не ем солёные бананы</b></p>
+        </div>
+        <div class="slide">
+          <p class="lead"><b>Трамп заявил, что прикажет разбомбить Нобелевский комитет, если ему не дадут премию мира</b></p>
+        </div>
+        <div class="slide">
+          <p class="lead"><b>Штирлиц и Мюллер ездили на танке по очереди. Очередь возмущалась, но не расходилась</b></p>
+        </div>
+      </div>
+    </div>
+    <button class="slider-btn next" aria-label="Следующий анекдот">&#9654;</button>
+  </div>
+</section>
+
+<style>
+  /* Стили для слайдера, в стиле сайта */
+  .anecdote-slider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    max-width: 100%;
+    overflow: hidden;
+    background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(250,250,255,0.96));
+    border: 1px solid rgba(11,12,13,0.04);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .slider-container {
+    overflow: hidden;
+    width: 100%;
+  }
+  .slider-track {
+    display: flex;
+    transition: transform 0.5s ease;
+  }
+  .slide {
+    min-width: 100%;
+    text-align: center;
+    padding: 0 20px;
+    box-sizing: border-box;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .slider-btn {
+    background: var(--glass-2);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--muted);
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    box-shadow: var(--card-shadow);
+  }
+  .slider-btn.prev {
+    left: 10px;
+  }
+  .slider-btn.next {
+    right: 10px;
+  }
+  .slider-btn:hover {
+    color: var(--text);
+    background: rgba(255,255,255,0.85);
+  }
+</style>
+
+<script>
+  // JS для слайдера
+  const sliderTrack = document.querySelector('.slider-track');
+  const slides = document.querySelectorAll('.slide');
+  const prevBtn = document.querySelector('.slider-btn.prev');
+  const nextBtn = document.querySelector('.slider-btn.next');
+  let currentIndex = 0;
+
+  function updateSlider() {
+    sliderTrack.style.transform = `translateX(-${currentIndex * 100}%)`;
+  }
+
+  prevBtn.addEventListener('click', () => {
+    currentIndex = (currentIndex > 0) ? currentIndex - 1 : slides.length - 1;
+    updateSlider();
+  });
+
+  nextBtn.addEventListener('click', () => {
+    currentIndex = (currentIndex < slides.length - 1) ? currentIndex + 1 : 0;
+    updateSlider();
+  });
+</script>
+
+
+<section class="reveal" id="mini-game">
+  <div class="balloon p1" style="right: -8%; top: -20%;"></div>
+  <div class="balloon p2" style="left: -12%; top: -30%;"></div>
+  <div class="balloon p3" style="left: 12%; top: -15%;"></div>
+  <h2>Лови шарики! 🎈</h2>
+  <p class="lead" style="text-align: center; margin-bottom: 20px;">Кликай по воздушным шарикам, чтобы поймать их! Не дай ни одному улететь!</p>
+  <div class="game-container">
+    <div class="game-header">
+      <span class="game-score" id="gameScore">Очки: 0</span>
+      <button class="btn ghost small" id="startGame">Начать игру</button>
+      <span class="game-highscore" id="gameHighscore">Рекорд: 0</span>
+    </div>
+    <canvas class="game-canvas" id="gameCanvas" width="600" height="400"></canvas>
+    <p class="game-instructions" id="gameInstructions">Нажми "Начать игру", чтобы начать!</p>
+  </div>
+</section>
+
+<style>
+  /* Enhanced Mini-game styles */
+  .game-container { 
+    background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(250,250,255,0.96)); 
+    border-radius: 18px; 
+    padding: 24px; 
+    border: 1px solid rgba(11,12,13,0.04); 
+    box-shadow: var(--card-shadow); 
+    position: relative;
+    overflow: hidden;
+  }
+  .game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding: 0 10px;
+  }
+  .game-score, .game-highscore { 
+    font-size: 18px; 
+    font-weight: 700; 
+    color: var(--text); 
+    background: linear-gradient(90deg, var(--accent-1)); 
+    -webkit-background-clip: text; 
+    background-clip: text; 
+    animation: scoreGlow 2s ease-in-out infinite alternate;
+  }
+  @keyframes scoreGlow {
+    from { filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.5)); }
+    to { filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.8)); }
+  }
+  .game-canvas { 
+    display: block; 
+    margin: 0 auto; 
+    border-radius: 14px; 
+    background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 50%, #f3f4f8 100%);
+    box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
+    cursor: pointer;
+    transition: box-shadow 0.3s ease;
+    position: relative;
+  }
+  .game-canvas:hover { box-shadow: 0 4px 20px rgba(255, 110, 199, 0.2); }
+  .game-instructions { 
+    text-align: center; 
+    color: var(--muted); 
+    font-size: 14px; 
+    margin-top: 12px; 
+    font-style: italic;
+    opacity: 0.8;
+  }
+  .game-canvas.popping { animation: popShake 0.1s ease-in-out; }
+  @keyframes popShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-2px); }
+    75% { transform: translateX(2px); }
+  }
+  /* Balloon enhancements */
+  .game-balloon {
+    transition: transform 0.2s ease;
+  }
+  .game-balloon:hover {
+    transform: scale(1.1);
+  }
+  /* Particle burst effect */
+  .particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: burst 0.8s ease-out forwards;
+  }
+  @keyframes burst {
+    0% { opacity: 1; transform: scale(1) translate(0, 0); }
+    100% { opacity: 0; transform: scale(0) translate(var(--dx), var(--dy)); }
+  }
+  /* Cloud background elements */
+  .cloud {
+    position: absolute;
+    background: rgba(255,255,255,0.6);
+    border-radius: 50px;
+    pointer-events: none;
+    animation: drift 20s linear infinite;
+  }
+  @keyframes drift {
+    0% { transform: translateX(-100px); }
+    100% { transform: translateX(700px); }
+  }
+</style>
+
+<script>
+  // Enhanced Mini-game logic with brighter colors, better strings, clear end game, controlled spawn
+  const gameCanvas = document.getElementById('gameCanvas');
+  const gameCtx = gameCanvas.getContext('2d');
+  const scoreEl = document.getElementById('gameScore');
+  const highscoreEl = document.getElementById('gameHighscore');
+  const instructionsEl = document.getElementById('gameInstructions');
+  const startBtn = document.getElementById('startGame');
+
+  let score = 0;
+  let highscore = localStorage.getItem('balloonHighscore') || 0;
+  let gameRunning = false;
+  let balloons = [];
+  let particles = [];
+  let gameSpeed = 1;
+  let clouds = [];
+  let escapedBalloon = false; // Track if any balloon escaped
+
+  highscoreEl.textContent = `Рекорд: ${highscore}`;
+
+  // Brighter, happier colors
+  const gameColors = [
+    '#ff69b4', // Hot pink
+    '#ffd700', // Gold
+    '#00bfff', // Deep sky blue
+    '#da70d6', // Orchid
+    '#ff1493', // Deep pink
+    '#98fb98', // Pale green
+    '#ffb6c1'  // Light pink
+  ];
+  
+  function rand(min, max) { return Math.random() * (max - min) + min; }
+
+  function createCloud() {
+    const cloud = document.createElement('div');
+    cloud.className = 'cloud';
+    cloud.style.width = rand(60, 120) + 'px';
+    cloud.style.height = rand(20, 40) + 'px';
+    cloud.style.top = rand(0, gameCanvas.height) + 'px';
+    cloud.style.left = '-100px';
+    cloud.style.opacity = rand(0.3, 0.7);
+    gameCanvas.parentNode.appendChild(cloud);
+    clouds.push(cloud);
+    
+    setTimeout(() => {
+      cloud.remove();
+      const idx = clouds.indexOf(cloud);
+      if (idx > -1) clouds.splice(idx, 1);
+    }, 22000);
+  }
+
+  function createBalloon() {
+    return {
+      x: rand(50, gameCanvas.width - 50),
+      y: gameCanvas.height,
+      radius: rand(25, 45),
+      speedY: rand(0.8, 1.8) * gameSpeed, // Slightly adjusted speed
+      angle: 0,
+      angularSpeed: rand(-0.01, 0.01),
+      color: gameColors[Math.floor(rand(0, gameColors.length))],
+      id: Date.now() + Math.random(),
+      shineOffset: rand(0, Math.PI * 2)
+    };
+  }
+
+  function createParticles(x, y, color) {
+    for (let i = 0; i < 15; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.style.left = (x + rand(-10, 10)) + 'px';
+      particle.style.top = (y + rand(-10, 10)) + 'px';
+      particle.style.backgroundColor = color;
+      particle.style.width = rand(3, 6) + 'px';
+      particle.style.height = particle.style.width;
+      particle.style.setProperty('--dx', (rand(-40, 40)) + 'px');
+      particle.style.setProperty('--dy', (rand(-40, 40)) + 'px');
+      gameCanvas.parentNode.appendChild(particle);
+      particles.push(particle);
+      
+      setTimeout(() => {
+        particle.remove();
+        const idx = particles.indexOf(particle);
+        if (idx > -1) particles.splice(idx, 1);
+      }, 800);
+    }
+    // Add heart particle occasionally
+    if (Math.random() < 0.2) {
+      const heart = document.createElement('div');
+      heart.innerHTML = '💖';
+      heart.style.position = 'absolute';
+      heart.style.left = x + 'px';
+      heart.style.top = y + 'px';
+      heart.style.fontSize = '20px';
+      heart.style.pointerEvents = 'none';
+      heart.style.zIndex = '10';
+      heart.style.animation = 'floatUp 1s ease-out forwards';
+      gameCanvas.parentNode.appendChild(heart);
+      setTimeout(() => {
+        heart.remove();
+      }, 1000);
+    }
+  }
+
+  // Add floatUp animation for hearts
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes floatUp {
+      0% { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateY(-50px) scale(1.5); }
+    }
+  `;
+  document.head.appendChild(style);
+
+  function drawGame() {
+    if (!gameRunning) return;
+    
+    gameCtx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+    
+    // Draw subtle clouds in background
+    if (Math.random() < 0.005) createCloud();
+    
+    // Controlled spawn - slower and less aggressive
+    if (Math.random() < 0.01 + (score / 5000)) { // Much slower spawn increase
+      balloons.push(createBalloon());
+    }
+    
+    let balloonEscaped = false;
+    balloons.forEach((balloon, i) => {
+      balloon.y -= balloon.speedY;
+      balloon.angle += balloon.angularSpeed;
+      balloon.x += Math.sin(balloon.angle * 2) * 0.3;
+      
+      // Draw balloon with brighter gradient
+      gameCtx.save();
+      gameCtx.translate(balloon.x, balloon.y);
+      gameCtx.rotate(balloon.angle);
+      
+      // Shadow
+      gameCtx.beginPath();
+      gameCtx.ellipse(0, 5, balloon.radius * 0.8, balloon.radius * 0.6, 0, 0, Math.PI * 2);
+      gameCtx.fillStyle = 'rgba(0,0,0,0.08)';
+      gameCtx.fill();
+      
+      // Brighter balloon body with radial gradient
+      const gradient = gameCtx.createRadialGradient(-balloon.radius / 3, -balloon.radius / 3, 0, 0, 0, balloon.radius);
+      gradient.addColorStop(0, balloon.color);
+      gradient.addColorStop(0.7, adjustBrightness(balloon.color, 30)); // Lighter
+      gradient.addColorStop(1, adjustBrightness(balloon.color, 10));
+      
+      gameCtx.beginPath();
+      gameCtx.ellipse(0, 0, balloon.radius, balloon.radius * 1.3, 0, 0, Math.PI * 2);
+      gameCtx.fillStyle = gradient;
+      gameCtx.fill();
+      
+      // Enhanced shine
+      gameCtx.beginPath();
+      gameCtx.arc(-balloon.radius / 4, -balloon.radius / 4, balloon.radius / 2.5, 0, Math.PI * 2);
+      gameCtx.fillStyle = 'rgba(255,255,255,0.7)';
+      gameCtx.fill();
+      
+      // Border
+      gameCtx.strokeStyle = 'rgba(255,255,255,0.5)';
+      gameCtx.lineWidth = 2;
+      gameCtx.stroke();
+      
+      // Improved string: straight thin dark gray line with small knot - now attached properly
+      const stringLength = 30;
+      gameCtx.beginPath();
+      gameCtx.moveTo(0, balloon.radius * 1.3);
+      gameCtx.lineTo(0, balloon.radius * 1.3 + stringLength);
+      gameCtx.strokeStyle = '#333'; // Dark gray
+      gameCtx.lineWidth = 1;
+      gameCtx.stroke();
+      
+      // Small knot at end
+      gameCtx.beginPath();
+      gameCtx.arc(0, balloon.radius * 1.3 + stringLength, 2, 0, Math.PI * 2);
+      gameCtx.fillStyle = '#333';
+      gameCtx.fill();
+      
+      gameCtx.restore();
+      
+      if (balloon.y < -balloon.radius * 2.5) {
+        balloonEscaped = true;
+        balloons.splice(i, 1);
+      }
+    });
+    
+    // End game if balloon escapes
+    if (balloonEscaped) {
+      escapedBalloon = true;
+      gameRunning = false;
+      instructionsEl.textContent = 'Ой! Шарик улетел! Игра окончена. Попробуй поймать все!';
+      startBtn.textContent = 'Играть снова';
+      startBtn.style.display = 'inline-block';
+    }
+    
+    scoreEl.textContent = `Очки: ${score}`;
+    requestAnimationFrame(drawGame);
+  }
+
+  // Helper function to adjust color brightness (now for lightening)
+  function adjustBrightness(color, amount) {
+    const num = parseInt(color.replace("#",""),16);
+    const amt = Math.round(2.55 * amount);
+    const R = (num >> 16) + amt;
+    const G = (num >> 8 & 0x00FF) + amt;
+    const B = (num & 0x0000FF) + amt;
+    return "#" + (0x1000000 + (R<255?R<1?0:R:255)*0x10000 + (G<255?G<1?0:G:255)*0x100 + (B<255?B<1?0:B:255)).toString(16).slice(1);
+  }
+
+  function startGame() {
+    score = 0;
+    balloons = [];
+    gameSpeed = 1;
+    gameRunning = true;
+    escapedBalloon = false;
+    instructionsEl.textContent = 'Лови все шарики! Не дай ни одному улететь! 🎈';
+    startBtn.style.display = 'none';
+    // Clear old clouds and particles
+    clouds.forEach(c => c.remove());
+    particles.forEach(p => p.remove());
+    clouds = [];
+    particles = [];
+    drawGame();
+  }
+
+  gameCanvas.addEventListener('click', (e) => {
+    if (!gameRunning) return;
+    const rect = gameCanvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    
+    balloons.forEach((balloon, i) => {
+      const dist = Math.sqrt((mouseX - balloon.x) ** 2 + (mouseY - balloon.y) ** 2);
+      if (dist < balloon.radius) {
+        // Pop effect
+        gameCanvas.classList.add('popping');
+        setTimeout(() => gameCanvas.classList.remove('popping'), 100);
+        
+        createParticles(balloon.x + rect.left, balloon.y + rect.top, balloon.color);
+        
+        // Launch small firework (if global function exists)
+        if (typeof launchFireworks === 'function') {
+          launchFireworks(1);
+        }
+        
+        balloons.splice(i, 1);
+        score += 10;
+        gameSpeed += 0.005;
+        
+        // Score pop animation
+        scoreEl.style.transform = 'scale(1.2)';
+        scoreEl.style.color = balloon.color;
+        setTimeout(() => {
+          scoreEl.style.transform = 'scale(1)';
+          scoreEl.style.color = '';
+        }, 200);
+        
+        // Check highscore
+        if (score > highscore) {
+          highscore = score;
+          localStorage.setItem('balloonHighscore', highscore);
+          highscoreEl.textContent = `Рекорд: ${highscore}`;
+          highscoreEl.style.color = '#ff69b4';
+          setTimeout(() => highscoreEl.style.color = 'var(--text)', 1000);
+        }
+      }
+    });
+  });
+
+  startBtn.addEventListener('click', startGame);
+
+  // Init particles array
+  particles = [];
+</script>
+
     <section class="reveal" id="poem">
 
       <div class="balloon p1" style="right: -15%; top: -10%;"></div>
@@ -506,25 +1173,109 @@
 
     </section>
 
-    <section class="reveal" id="gift">
+<section class="reveal" id="gift">
+  <div class="balloon p1" style="right: -2%; top: -28%;"></div>
+  <div class="balloon p2" style="left: -20%; top: -18%;"></div>
 
-      <div class="balloon p1" style="right: -2%; top: -28%;"></div>
+  <div class="balloon p4" style="right: -12%; top: -15%;"></div>
 
-      <div class="balloon p2" style="left: -20%; top: -18%;"></div>
+  <h2>Подарок и финал</h2>
+  <p class="lead">Надеюсь, на мой подарочек, который в скором времени ты получишь (я имею в виду, когда заберешь с озона), ты снимешь обзорчик. Да, знаю, что этот Кью Ар уже сегодня не действителен. Вышлю днём в тг ОКЭЙ???</p>
+  
+  <div style="text-align: center; margin: 20px 0; padding: 12px; background: linear-gradient(180deg, rgba(250,250,255,1), rgba(245,245,250,1)); border-radius: 14px; box-shadow: var(--card-shadow);">
+    <img src="2025-10-18 14.54.15.jpg" alt="Скриншот подарка" style="max-width: 100%; height: auto; border-radius: 10px; display: block; margin: 0 auto;">
+  </div>
+  
+  <p style="font-weight:800" class="signature">Люблю тебя, мой дорогой. С днём рождения, твой Миша ❤️</p>
+</section>
 
-      <div class="balloon p3" style="left: 5%; top: -32%;"></div>
 
-      <div class="balloon p4" style="right: -12%; top: -15%;"></div>
+<div class="spotify-section" style="text-align: center; margin: 40px 0; padding: 30px; background: linear-gradient(180deg, rgba(0,0,0,0.05), rgba(29,185,84,0.03)); border-radius: 18px; box-shadow: var(--card-shadow), inset 0 1px 0 rgba(255,255,255,0.1); border: 1px solid rgba(29,185,84,0.2); position: relative; overflow: hidden;">
+  <!-- Floating music notes animation -->
+  <div class="music-notes-bg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden;">
+    <div class="music-note" style="position: absolute; top: 10%; left: 5%; font-size: 24px; animation: noteFloat 6s ease-in-out infinite; color: rgba(29,185,84,0.6);">♪</div>
+    <div class="music-note" style="position: absolute; top: 40%; left: 85%; font-size: 20px; animation: noteFloat 5s ease-in-out infinite reverse; color: rgba(29,185,84,0.4);">♫</div>
+    <div class="music-note" style="position: absolute; top: 70%; left: 20%; font-size: 28px; animation: noteFloat 7s ease-in-out infinite; color: rgba(29,185,84,0.5);">♬</div>
+  </div>
 
-      <div class="balloon p5" style="left: 15%; top: -25%;"></div>
+  <h3 style="margin: 0 0 20px 0; color: #1db954; font-size: 22px; font-weight: 700; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.1);">Праздничный плейлист — для праздничного настроения! 🎶✨</h3>
+  
+  <div class="spotify-container" style="position: relative; z-index: 2; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 32px rgba(29,185,84,0.2), 0 0 0 1px rgba(29,185,84,0.1); transition: all 0.3s ease; background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(29,185,84,0.05));">
+    <iframe src="https://open.spotify.com/embed/playlist/5tsIxCW1IrBX0tFoa82Pjl?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" style="border-radius: 12px; transition: transform 0.3s ease;"></iframe>
+  </div>
+  
+  <p style="color: var(--muted); font-size: 16px; margin-top: 15px; font-style: italic;">Треки из моего плейлиста — для твоего праздничного настроения! 🎧</p>
+</div>
+  
+<style>
+  /* Spotify-inspired animations */
+  @keyframes noteFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
+    50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+  }
 
-      <h2>Подарок и финал</h2>
+  .spotify-container:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 40px rgba(29,185,84,0.3), 0 0 0 1px rgba(29,185,84,0.2);
+  }
 
-      <p class="lead">Надеюсь, подарок ты мой получишь сегодня днём и снимешь обзорчик (там ебатория одна едет прямо в притык, надеюсь она днём приедет и я скину Кью-Ар кодик на ОЗОН!!!) Но сходишь, конечно, когда удобно будет</p>
+  .spotify-container:hover .play-overlay {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
 
-      <p style="font-weight:800" class="signature">Люблю тебя, мой дорогой. С днём рождения, твой Миша ❤️</p>
+  .play-overlay:hover {
+    background: #1db954;
+    transform: translate(-50%, -50%) scale(1.05);
+    box-shadow: 0 6px 25px rgba(29,185,84,0.5);
+  }
 
-    </section>
+  .play-overlay:active {
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+
+  /* Pulse on load */
+  .spotify-container {
+    animation: spotifyPulse 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes spotifyPulse {
+    from { box-shadow: 0 8px 32px rgba(29,185,84,0.2); }
+    to { box-shadow: 0 8px 32px rgba(29,185,84,0.3); }
+  }
+</style>
+
+<script>
+  // Spotify embed enhancer
+  const spotifyContainer = document.querySelector('.spotify-container');
+  const playOverlay = document.querySelector('.play-overlay');
+  const spotifyIframe = document.querySelector('iframe[src*="spotify"]');
+
+  function enhanceSpotify() {
+    // Add pulse class on load
+    spotifyContainer.classList.add('loaded');
+
+    // Click overlay to focus iframe (triggers play in embed)
+    playOverlay.addEventListener('click', () => {
+      spotifyIframe.contentWindow.focus(); // Focus iframe
+      playOverlay.style.opacity = '0'; // Hide overlay after click
+      playOverlay.style.transition = 'opacity 0.5s ease-out';
+
+      // Trigger small confetti or firework
+      if (typeof confOn !== 'undefined') confOn = true;
+      if (typeof launchFireworks === 'undefined') launchFireworks(1);
+
+      // Pulse the container
+      spotifyContainer.style.animation = 'none';
+      setTimeout(() => {
+        spotifyContainer.style.animation = 'spotifyPulse 2s ease-in-out infinite alternate';
+      }, 100);
+    });
+  }
+
+  // Init on load
+  window.addEventListener('load', enhanceSpotify);
+</script>
 
     <footer class="reveal">© Персональная открытка от rrilz </footer>
 
@@ -896,6 +1647,8 @@
 
     document.addEventListener('keydown',(e)=>{ if(e.key==='Escape'){ modal.classList.remove('open'); confOn=false } });
     document.getElementById('fireworksBtn').addEventListener('click', () => { launchFireworks(5); });
+    
+    
   </script>
 
 </body>
